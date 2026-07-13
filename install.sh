@@ -73,7 +73,7 @@ if ! asdf plugin list | grep -q "ruby"; then
     asdf plugin add ruby
 fi
 asdf install ruby 3.4.8
-asdf global ruby 3.4.8
+asdf set ruby 3.4.8
 
 # 8. Install Node.js using asdf
 echo "🟢 Installing Node.js (latest)..."
@@ -81,7 +81,7 @@ if ! asdf plugin list | grep -q "nodejs"; then
     asdf plugin add nodejs
 fi
 asdf install nodejs latest
-asdf global nodejs latest
+asdf set nodejs latest
 
 echo "✅ Installation complete!"
 echo "🔄 Please run: source $RC_FILE (or restart your terminal) to apply the changes."
