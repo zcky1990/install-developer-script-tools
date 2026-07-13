@@ -67,11 +67,22 @@ fi
 # Load asdf shims into current session
 export PATH="$HOME/.asdf/shims:$PATH"
 
-# 7. Install Ruby using asdf
+# 7. Install libyaml and Ruby using asdf
+echo "📦 Installing libyaml dependency..."
+if ! brew list libyaml &>/dev/null; then
+    brew install libyaml
+else
+    echo "ℹ️ libyaml is already installed via Homebrew."
+fi
+
 echo "💎 Installing Ruby 3.4.8..."
 if ! asdf plugin list | grep -q "ruby"; then
     asdf plugin add ruby
 fi
+
+# Tell ruby-build exactly where to find the custom-installed libyaml
+export RUBY_CONFIGURE_OPTS="--with-libyaml-dir=$(brew --prefix libyaml)"
+
 asdf install ruby 3.4.8
 asdf set ruby 3.4.8
 
