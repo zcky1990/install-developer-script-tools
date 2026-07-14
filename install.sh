@@ -68,6 +68,10 @@ append_to_rc "export PATH=\"$BREW_DIR/bin:\$PATH\""
 append_to_rc "export PATH=\"\$HOME/.asdf/shims:\$PATH\""
 append_to_rc "export HOMEBREW_CASK_OPTS=\"--appdir=\$HOME/Apps\""
 
+# fix vips not found after installing vips with homebrew without sudo
+append_to_rc "export DYLD_LIBRARY_PATH=\"$HOMEBREW_PREFIX/lib:\$DYLD_LIBRARY_PATH\""
+append_to_rc "export LD_LIBRARY_PATH=\"$HOMEBREW_PREFIX/lib\""
+
 # 7. Evaluate Homebrew for the current script session
 eval "$($BREW_DIR/bin/brew shellenv)"
 export PATH="$BREW_DIR/bin:$PATH"
