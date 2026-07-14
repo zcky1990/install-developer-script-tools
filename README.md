@@ -1,6 +1,6 @@
 # Non-Sudo Developer Tool Installer
 
-A helper script designed for restricted work environments where you do not have `sudo` (administrator) privileges. This script installs **Homebrew**, **asdf**, **Ruby**, and **Node.js** entirely within your user home directory.
+A helper script designed for restricted work environments where you do not have `sudo` (administrator) privileges. This script installs **Homebrew**, **asdf**, **Ruby**, and **Node.js** entirely within your user home directory. GUI apps from Homebrew Cask are redirected to `~/Apps`.
 
 ---
 
@@ -55,7 +55,9 @@ source ~/.bash_profile
 
 ## 📦 What this Script Installs
 
-* **Homebrew**: Installed locally at `~/homebrew` without requiring root permissions.
+* **Oh My Zsh**: Installed unattended into `~/.oh-my-zsh` (requires `zsh`; skips changing the default shell).
+* **Homebrew**: Installed locally at `~/homebrew` (prefix `~/homebrew`, Cellar `~/homebrew/Cellar`) without requiring root permissions.
+* **Apps dir**: Creates `~/Apps` and sets `HOMEBREW_CASK_OPTS=--appdir=$HOME/Apps` for cask installs.
 * **libyaml**: Standard library dependency required for Ruby compilation.
 * **asdf**: Extensible version manager for managing runtimes.
 * **Ruby (3.4.8)**: Evaluated and built using `libyaml`.

@@ -18,7 +18,17 @@ else
     echo "ℹ️ Apps directory already exists at $APPS_DIR."
 fi
 
-# 3. Clone Homebrew if it doesn't exist
+# 3. Install Oh My Zsh (unattended, no chsh / no interactive zsh)
+if [ -d "$HOME/.oh-my-zsh" ]; then
+    echo "ℹ️ Oh My Zsh is already installed, skipping."
+elif ! command -v zsh >/dev/null 2>&1; then
+    echo "⚠️ zsh not found; skipping Oh My Zsh install. Install zsh first, then re-run."
+else
+    echo "🎨 Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# 4. Clone Homebrew if it doesn't exist
 if [ ! -d "$BREW_DIR" ]; then
     echo "📦 Cloning Homebrew into $BREW_DIR..."
     git clone https://github.com/Homebrew/brew.git "$BREW_DIR"
@@ -26,7 +36,7 @@ else
     echo "ℹ️ Homebrew directory already exists, skipping clone."
 fi
 
-# 4. Determine the user's shell configuration file
+# 5. Determine the user's shell configuration file
 RC_FILE=""
 if [ -n "$ZSH_VERSION" ] || [ "${SHELL##*/}" = "zsh" ]; then
     RC_FILE="$HOME/.zshrc"
@@ -43,7 +53,7 @@ echo "📝 Configuring environment variables in $RC_FILE..."
 # Create file if it doesn't exist
 touch "$RC_FILE"
 
-# 5. Helper function to append lines safely without duplicating
+# 6. Helper function to append lines safely without duplicating
 append_to_rc() {
     local line="$1"
     if ! grep -Fxq "$line" "$RC_FILE"; then
@@ -58,7 +68,7 @@ append_to_rc "export PATH=\"$BREW_DIR/bin:\$PATH\""
 append_to_rc "export PATH=\"\$HOME/.asdf/shims:\$PATH\""
 append_to_rc "export HOMEBREW_CASK_OPTS=\"--appdir=\$HOME/Apps\""
 
-# 6. Evaluate Homebrew for the current script session
+# 7. Evaluate Homebrew for the current script session
 eval "$($BREW_DIR/bin/brew shellenv)"
 export PATH="$BREW_DIR/bin:$PATH"
 export HOMEBREW_CASK_OPTS="--appdir=$HOME/Apps"
@@ -67,7 +77,7 @@ export HOMEBREW_CASK_OPTS="--appdir=$HOME/Apps"
 echo "🔄 Updating Homebrew..."
 brew update
 
-# 7. Install asdf via Homebrew
+# 8. Install asdf via Homebrew
 echo "📥 Installing asdf via Homebrew..."
 if ! brew list asdf &>/dev/null; then
     brew install asdf
@@ -78,7 +88,7 @@ fi
 # Load asdf shims into current session
 export PATH="$HOME/.asdf/shims:$PATH"
 
-# 8. Install libyaml and Ruby using asdf
+# 9. Install libyaml and Ruby using asdf
 echo "📦 Installing libyaml dependency..."
 if ! brew list libyaml &>/dev/null; then
     brew install libyaml
@@ -97,7 +107,7 @@ export RUBY_CONFIGURE_OPTS="--with-libyaml-dir=$(brew --prefix libyaml)"
 asdf install ruby 3.4.8
 asdf set ruby 3.4.8
 
-# 9. Install Node.js using asdf
+# 10. Install Node.js using asdf
 echo "🟢 Installing Node.js (latest)..."
 if ! asdf plugin list | grep -q "nodejs"; then
     asdf plugin add nodejs
